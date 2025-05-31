@@ -6,9 +6,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.Arrays;
 
-public final class LegacyFilesUtils {
+public final class LegacyInputStream {
 
-    private LegacyFilesUtils() {
+    private LegacyInputStream() {
         // no instance
     }
 
@@ -63,5 +63,24 @@ public final class LegacyFilesUtils {
         }
         return new File(pathBuilder.toString());
     }
+
+    public static byte[] readAllBytes(InputStream input) throws IOException {
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        byte[] data = new byte[4096];
+        int nRead;
+        while ((nRead = input.read(data, 0, data.length)) != -1) {
+            buffer.write(data, 0, nRead);
+        }
+        return buffer.toByteArray();
+    }
+
+    public static void createDirectories(File dir) throws IOException {
+    if (!dir.exists()) {
+        if (!dir.mkdirs() && !dir.isDirectory()) {
+            throw new IOException("Failed to create directories: " + dir);
+        }
+    }
+}
+
 }
 
